@@ -113,7 +113,7 @@ Relationships:
   CATEGORIES ──< EXPENSES   (One-to-Many: a category applies to many expenses)
 ```
 
-For a visual ER diagram, see [`docs/images/er_diagram.png`](./docs/images/er_diagram.png).
+![ER_Diagram](./docs/images/er_diagram.png)
 
 ---
 
