@@ -30,6 +30,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app/ ./app/
 COPY alembic/ ./alembic/
 COPY alembic.ini .
+COPY seed_demo.py .
 
 # Copy compiled CSS from builder stage
 COPY --from=css-builder /build/output.css ./app/static/css/output.css
@@ -37,5 +38,6 @@ COPY --from=css-builder /build/output.css ./app/static/css/output.css
 # Expose port
 EXPOSE 8000
 
-# Start with Alembic migration then Uvicorn
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Run Alembic migrations, then start Uvicorn
+# PORT env var is set by Render; falls back to 8000 locally
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
