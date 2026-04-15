@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Expense Tracker{% endblock %}
+
+{% block content %}
+<!-- Period Selector -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+    <div>
+        <h1 class="text-2xl font-bold text-white">Dashboard</h1>
+        <p class="text-gray-500 text-sm mt-1">{{ start_date.strftime('%b %d') }} — {{ end_date.strftime('%b %d, %Y') }}
+        </p>
+    </div>
+    <div class="flex items-center gap-2" id="period-selector">
+        <a href="/dashboard?period=daily"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all {% if period == 'daily' %}bg-violet-600 text-white{% else %}bg-gray-800 text-gray-400 hover:text-white{% endif %}">Today</a>
+        <a href="/dashboard?period=monthly&month={{ month }}&year={{ year }}"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all {% if period == 'monthly' %}bg-violet-600 text-white{% else %}bg-gray-800 text-gray-400 hover:text-white{% endif %}">Monthly</a>
+        <a href="/dashboard?period=yearly&year={{ year }}"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all {% if period == 'yearly' %}bg-violet-600 text-white{% else %}bg-gray-800 text-gray-400 hover:text-white{% endif %}">Yearly</a>
+        {% if period == 'monthly' %}
+        <span class="text-gray-600 mx-1">|</span>
+        <a href="/dashboard?period=monthly&month={{ month - 1 if month > 1 else 12 }}&year={{ year if month > 1 else year - 1 }}"
+            class="px-2 py-1.5 rounded-lg text-xs bg-gray-800 text-gray-400 hover:text-white transition-all">&larr;</a>
+        <a href="/dashboard?period=monthly&month={{ month + 1 if month < 12 else 1 }}&year={{ year if month < 12 else year + 1 }}"
+            class="px-2 py-1.5 rounded-lg text-xs bg-gray-800 text-gray-400 hover:text-white transition-all">&rarr;</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <!-- Total Spending -->
+    <div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-5 hover:border-violet-500/20 transition-all duration-300 group"
+        id="card-total">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spending</span>
+            <div
+                class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center group-hover:bg-violet-500/20 transition-colors">
+                <svg class="w-4 h-4 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V7m0 10v1" />
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-white">₹{{ "%.2f"|format(total_spending) }}</p>
+    </div>
+
+    <!-- Average Daily -->
+    <div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-5 hover:border-blue-500/20 transition-all duration-300 group"
+        id="card-avg">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Daily</span>
+            <div
+                class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-white">₹{{ "%.2f"|format(avg_daily) }}</p>
+    </div>
+
+    <!-- Expense Count -->
+    <div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-5 hover:border-emerald-500/20 transition-all duration-300 group"
+        id="card-count">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Transactions</span>
+            <div
+                class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-white">{{ expense_count }}</p>
+    </div>
+
+    <!-- Top Category -->
+    <div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-5 hover:border-amber-500/20 transition-all duration-300 group"
+        id="card-top-cat">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Top Category</span>
+            <div
+                class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors">
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl font-bold text-white">{{ top_category or "—" }}</p>
+    </div>
+</div>
+
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Spending by Category (Doughnut) -->
+    <div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-6" id="chart-category-card">
+        <h2 class="text-sm font-semibold text-gray-300 mb-4">Spending by Category</h2>
+        <div class="relative" style="height: 280px;">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Daily Trend (Line) -->
+    <div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-6" id="chart-daily-card">
+        <h2 class="text-sm font-semibold text-gray-300 mb-4">Daily Spending Trend</h2>
+        <div class="relative" style="height: 280px;">
+            <canvas id="dailyChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Monthly Comparison (Bar) -->
+<div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-6 mb-8" id="chart-monthly-card">
+    <h2 class="text-sm font-semibold text-gray-300 mb-4">Monthly Comparison (Last 6 Months)</h2>
+    <div class="relative" style="height: 260px;">
+        <canvas id="monthlyChart"></canvas>
+    </div>
+</div>
+
+<!-- Top Expenses -->
+{% if top_expenses %}
+<div class="bg-gray-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-6" id="top-expenses-card">
+    <h2 class="text-sm font-semibold text-gray-300 mb-4">Top Expenses</h2>
+    <div class="space-y-3">
+        {% for exp in top_expenses %}
+        <div
+            class="flex items-center justify-between p-3 rounded-xl bg-gray-800/30 hover:bg-gray-800/50 transition-colors">
+            <div class="flex items-center gap-3">
+                <span class="text-lg">{{ exp.category.icon }}</span>
+                <div>
+                    <p class="text-sm font-medium text-white">{{ exp.description or exp.category.name }}</p>
+                    <p class="text-xs text-gray-500">{{ exp.date.strftime('%b %d, %Y') }} · {{ exp.category.name }}</p>
+                </div>
+            </div>
+            <span class="text-sm font-semibold text-white">₹{{ "%.2f"|format(exp.amount) }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const categoryData = {{ spending_by_category| safe }};
+    const dailyData = {{ daily_trend| safe }};
+    const monthlyData = {{ monthly_comparison| safe }};
+
+    // Chart.js defaults for dark theme
+    Chart.defaults.color = '#9ca3af';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.03)';
+
+    // ── Doughnut Chart: Spending by Category ──
+    if (categoryData.length > 0) {
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: categoryData.map(c => c.icon + ' ' + c.category),
+                datasets: [{
+                    data: categoryData.map(c => c.total),
+                    backgroundColor: categoryData.map(c => c.color),
+                    borderWidth: 0,
+                    hoverOffset: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { padding: 16, usePointStyle: true, pointStyleWidth: 10, font: { size: 12 } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => ` ₹${ctx.parsed.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        document.getElementById('categoryChart').parentElement.innerHTML = '<p class="text-gray-600 text-center py-20">No data for this period</p>';
+    }
+
+    // ── Line Chart: Daily Trend ──
+    if (dailyData.length > 0) {
+        const gradient = document.getElementById('dailyChart').getContext('2d');
+        const grad = gradient.createLinearGradient(0, 0, 0, 280);
+        grad.addColorStop(0, 'rgba(139, 92, 246, 0.3)');
+        grad.addColorStop(1, 'rgba(139, 92, 246, 0.0)');
+
+        new Chart(document.getElementById('dailyChart'), {
+            type: 'line',
+            data: {
+                labels: dailyData.map(d => {
+                    const dt = new Date(d.date);
+                    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }),
+                datasets: [{
+                    label: 'Spending',
+                    data: dailyData.map(d => d.total),
+                    borderColor: '#8b5cf6',
+                    backgroundColor: grad,
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#8b5cf6',
+                    pointHoverRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `₹${ctx.parsed.y.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+                        }
+                    }
+                },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { callback: v => '₹' + v } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    } else {
+        document.getElementById('dailyChart').parentElement.innerHTML = '<p class="text-gray-600 text-center py-20">No data for this period</p>';
+    }
+
+    // ── Bar Chart: Monthly Comparison ──
+    if (monthlyData.length > 0) {
+        new Chart(document.getElementById('monthlyChart'), {
+            type: 'bar',
+            data: {
+                labels: monthlyData.map(m => m.label),
+                datasets: [{
+                    label: 'Monthly Spending',
+                    data: monthlyData.map(m => m.total),
+                    backgroundColor: 'rgba(99, 102, 241, 0.5)',
+                    borderColor: '#6366f1',
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    hoverBackgroundColor: 'rgba(99, 102, 241, 0.8)',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `₹${ctx.parsed.y.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+                        }
+                    }
+                },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { callback: v => '₹' + v } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    } else {
+        document.getElementById('monthlyChart').parentElement.innerHTML = '<p class="text-gray-600 text-center py-20">No data for this period</p>';
+    }
+</script>
+{% endblock %}

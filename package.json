@@ -1,0 +1,11 @@
+{
+  "name": "expense-tracker-css",
+  "private": true,
+  "scripts": {
+    "dev:css": "npx @tailwindcss/cli -i ./styles/input.css -o ./app/static/css/output.css --watch",
+    "build:css": "npx @tailwindcss/cli -i ./styles/input.css -o ./app/static/css/output.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0"
+  }
+}
