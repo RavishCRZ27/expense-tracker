@@ -88,7 +88,9 @@ def get_user_by_id(db: Session, user_id: int) -> Optional[User]:
 
 def seed_admin(db: Session) -> None:
     """Create the predefined admin user if not already present."""
-    existing = db.query(User).filter(User.username == ADMIN_USERNAME).first()
+    existing = db.query(User).filter(
+        (User.username == ADMIN_USERNAME) | (User.email == ADMIN_EMAIL)
+    ).first()
     if not existing:
         admin = User(
             username=ADMIN_USERNAME,

@@ -1,6 +1,7 @@
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, FileResponse
 from app.database import engine, Base, SessionLocal
 from app.models import User, Category, Expense  # noqa: F401 — ensure models are registered
 from app.services.category_service import seed_categories
@@ -32,7 +33,19 @@ app = FastAPI(
 
 # ── Static Files ───────────────────────────────────────────────────────────
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse(STATIC_DIR / "favicon.ico", media_type="image/x-icon")
+
+
+@app.get("/apple-touch-icon.png", include_in_schema=False)
+@app.get("/apple-touch-icon-precomposed.png", include_in_schema=False)
+async def apple_touch_icon():
+    return FileResponse(STATIC_DIR / "apple-touch-icon.png", media_type="image/png")
 
 # ── Routers ────────────────────────────────────────────────────────────────
 

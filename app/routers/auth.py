@@ -47,6 +47,7 @@ def login(
         value=token,
         httponly=True,
         samesite="lax",
+        secure=False,
         max_age=3600,
     )
     return response
@@ -102,6 +103,7 @@ def register(
         value=token,
         httponly=True,
         samesite="lax",
+        secure=False,
         max_age=3600,
     )
     return response

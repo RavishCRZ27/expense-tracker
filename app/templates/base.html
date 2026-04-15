@@ -6,13 +6,18 @@
     <meta name="description" content="Personal Expense Tracker - Track, categorize, and analyze your spending habits with powerful analytics">
     <title>{% block title %}Expense Tracker{% endblock %}</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS (compiled output) -->
-    <link href="{{ url_for('static', path='/css/output.css') }}" rel="stylesheet">
+    <link href="/static/css/output.css" rel="stylesheet">
 
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
