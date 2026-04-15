@@ -2,10 +2,11 @@ from datetime import date, timedelta
 from decimal import Decimal
 import json
 from fastapi import APIRouter, Request, Depends, Query
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.dependencies import get_current_user
+from app.dependencies import get_current_user, get_current_user_optional
 from app.models.user import User
 from app.services import expense_service, category_service
 
@@ -14,10 +15,11 @@ templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/")
-def home(request: Request, user=Depends(get_current_user)):
-    """Redirect home to dashboard."""
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/dashboard", status_code=302)
+def home(request: Request, user=Depends(get_current_user_optional)):
+    """Public landing page. Shows dashboard link if logged in."""
+    return templates.TemplateResponse(request, "landing.html", {
+        "user": user,
+    })
 
 
 @router.get("/dashboard")

@@ -4,7 +4,8 @@ from fastapi.responses import RedirectResponse
 from app.database import engine, Base, SessionLocal
 from app.models import User, Category, Expense  # noqa: F401 — ensure models are registered
 from app.services.category_service import seed_categories
-from app.routers import auth, dashboard, expenses, api
+from app.services.auth_service import seed_admin
+from app.routers import auth, dashboard, expenses, api, admin
 
 # ── OpenAPI Configuration ──────────────────────────────────────────────────
 
@@ -21,6 +22,7 @@ app = FastAPI(
         "- **Expense CRUD**: Create, read, update, and soft-delete expenses\n"
         "- **Filtering & Sorting**: Filter by category, date range; sort by date, amount\n"
         "- **Analytics**: Spending by category, daily trends, monthly comparisons\n"
+        "- **Admin Panel**: Platform-wide analytics and user management\n"
         "- **Soft Delete**: Deleted expenses can be restored\n"
     ),
     version="1.0.0",
@@ -38,6 +40,7 @@ app.include_router(auth.router)
 app.include_router(dashboard.router)
 app.include_router(expenses.router)
 app.include_router(api.router)
+app.include_router(admin.router)
 
 # ── Startup Events ─────────────────────────────────────────────────────────
 
@@ -49,5 +52,6 @@ def on_startup():
     db = SessionLocal()
     try:
         seed_categories(db)
+        seed_admin(db)
     finally:
         db.close()

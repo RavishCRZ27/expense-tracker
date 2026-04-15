@@ -11,6 +11,12 @@ settings = get_settings()
 # Password hashing configuration
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# ── Predefined Admin ──────────────────────────────────────────────────────
+ADMIN_USERNAME = "Ravish"
+ADMIN_EMAIL = "ravishpandey27@gmail.com"
+ADMIN_PASSWORD = "ravish123"
+ADMIN_FULL_NAME = "Ravish Pandey"
+
 
 def hash_password(password: str) -> str:
     """Hash a plaintext password using bcrypt."""
@@ -78,3 +84,18 @@ def get_user_by_email(db: Session, email: str) -> Optional[User]:
 def get_user_by_id(db: Session, user_id: int) -> Optional[User]:
     """Look up a user by ID."""
     return db.query(User).filter(User.id == user_id).first()
+
+
+def seed_admin(db: Session) -> None:
+    """Create the predefined admin user if not already present."""
+    existing = db.query(User).filter(User.username == ADMIN_USERNAME).first()
+    if not existing:
+        admin = User(
+            username=ADMIN_USERNAME,
+            email=ADMIN_EMAIL,
+            hashed_password=hash_password(ADMIN_PASSWORD),
+            full_name=ADMIN_FULL_NAME,
+            is_admin=True,
+        )
+        db.add(admin)
+        db.commit()

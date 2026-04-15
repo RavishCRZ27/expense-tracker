@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% block title %}Expense Tracker — Smart Personal Finance Management{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-gradient min-h-screen flex flex-col">
+    <!-- Top Nav Bar for Landing -->
+    <nav class="w-full py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2.5 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-all animate-pulse-glow">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <span class="text-xl font-bold gradient-text">ExpenseTracker</span>
+            </a>
+            <div class="flex items-center gap-3">
+                {% if user %}
+                <a href="/dashboard" class="px-5 py-2.5 rounded-xl text-sm font-semibold btn-primary">
+                    Go to Dashboard →
+                </a>
+                {% else %}
+                <a href="/login" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-400 hover:text-white transition-colors">Sign In</a>
+                <a href="/register" class="px-5 py-2.5 rounded-xl text-sm font-semibold btn-primary">
+                    Get Started Free
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="flex-1 flex items-center justify-center px-4 pb-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <!-- Badge -->
+            <div class="animate-fade-in delay-1">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-8">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    DBMS Lab Project — Full Stack Application
+                </span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight animate-slide-up delay-2">
+                Take Control of<br>
+                <span class="gradient-text">Your Finances</span>
+            </h1>
+
+            <!-- Sub-headline -->
+            <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed animate-slide-up delay-3">
+                Track every expense, analyze spending patterns, and make smarter financial decisions — all in one beautifully crafted application.
+            </p>
+
+            <!-- CTAs -->
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up delay-4">
+                {% if user %}
+                <a href="/dashboard" class="px-8 py-4 rounded-xl text-base font-semibold btn-primary flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    Open Dashboard
+                </a>
+                {% else %}
+                <a href="/register" class="px-8 py-4 rounded-xl text-base font-semibold btn-primary flex items-center gap-2">
+                    Start Tracking For Free
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </a>
+                <a href="/login" class="px-8 py-4 rounded-xl text-base font-medium btn-secondary flex items-center gap-2">
+                    Sign In
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="mt-20 max-w-5xl mx-auto relative group animate-fade-in delay-5 hidden md:block">
+                <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900/50">
+                    <img src="/static/images/hero_abstract.png" alt="Fintech Data Abstraction" class="w-full object-cover rounded-xl" />
+                </div>
+            </div>
+
+            <!-- Floating Stats Preview -->
+            <div class="mt-16 grid grid-cols-3 gap-4 max-w-lg mx-auto animate-fade-in delay-6">
+                <div class="card p-4 text-center">
+                    <p class="text-2xl font-bold text-white">8</p>
+                    <p class="text-xs text-slate-500 mt-1">Categories</p>
+                </div>
+                <div class="card p-4 text-center">
+                    <p class="text-2xl font-bold text-white">REST</p>
+                    <p class="text-xs text-slate-500 mt-1">Full API</p>
+                </div>
+                <div class="card p-4 text-center">
+                    <p class="text-2xl font-bold text-white">JWT</p>
+                    <p class="text-xs text-slate-500 mt-1">Secure Auth</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<section class="py-24 px-4" id="features">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Everything You Need</h2>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto">Powerful features to help you understand and control your spending habits.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Feature 1 -->
+            <div class="feature-card animate-fade-in delay-1">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Expense Tracking</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Create, read, update, and soft-delete expenses with full CRUD operations. Never lose your data.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card animate-fade-in delay-2">
+                <div class="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Rich Analytics</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Interactive charts with category breakdowns, daily trends, and monthly comparisons using Chart.js.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card animate-fade-in delay-3">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Smart Categories</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">8 predefined categories with emoji icons — Food, Travel, Shopping, Bills, Entertainment, Health, Education, and more.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature-card animate-fade-in delay-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Filtering & Sorting</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Filter by category, date range and sort by date, amount, or category. Find any expense instantly.</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="feature-card animate-fade-in delay-5">
+                <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">REST API</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Full JSON API with OpenAPI/Swagger documentation. Build integrations or automate your tracking.</p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="feature-card animate-fade-in delay-6">
+                <div class="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">Secure & Admin</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">JWT authentication with HttpOnly cookies. Admin panel with platform-wide analytics and user management.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack Section -->
+<section class="py-20 px-4 border-t border-white/5">
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-2xl font-bold text-white mb-3">Built With Modern Technologies</h2>
+        <p class="text-slate-500 text-sm mb-10">A DBMS lab project demonstrating relational database design, SQL queries, and full-stack web development.</p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3">
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                FastAPI
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                PostgreSQL
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-orange-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                SQLAlchemy
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Tailwind CSS
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v18h18V3H3zm15.45 14.55H5.55V6.45h12.9v11.1z"/></svg>
+                Chart.js
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>
+                Jinja2
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-red-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                Alembic
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-teal-400" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+                JWT Auth
+            </span>
+            <span class="tech-pill">
+                <svg class="w-4 h-4 text-indigo-400" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
+                Docker
+            </span>
+        </div>
+    </div>
+</section>
+
+<!-- Experience Section -->
+<section class="py-24 px-4 border-t border-white/5 relative overflow-hidden">
+    <!-- Background Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-teal-500/20 blur-[100px] rounded-full pointer-events-none"></div>
+    
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <!-- Text Content -->
+            <div class="lg:w-5/12">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-6">
+                    Professional Grade
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-white leading-tight mb-6">
+                    Designed for <br/>
+                    <span class="gradient-text">Modern Finance</span>
+                </h2>
+                <p class="text-lg text-slate-400 mb-8 leading-relaxed">
+                    Experience a beautifully engineered application that combines sleek glassmorphism aesthetics with powerful data visualization tools. Never look at your finances the same way again.
+                </p>
+                
+                <ul class="space-y-6">
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1 w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold text-lg mb-1">State-of-the-Art Design</h4>
+                            <p class="text-sm text-slate-500 leading-relaxed">Premium dark mode tailored for ultimate readability and data clarity.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1 w-10 h-10 rounded-full bg-teal-500/10 flex items-center justify-center shrink-0 border border-teal-500/20">
+                            <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-semibold text-lg mb-1">Lightning Fast Loading</h4>
+                            <p class="text-sm text-slate-500 leading-relaxed">Built with pure CSS natively optimizing query layers.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Image Panel -->
+            <div class="lg:w-7/12 relative group w-full pt-8 lg:pt-0">
+                <div class="absolute -inset-1 bg-gradient-to-tr from-emerald-500 to-cyan-500 rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-700"></div>
+                <img src="/static/images/lifestyle.png" alt="Modern Workspace Finance" class="relative rounded-3xl w-full object-cover shadow-2xl border border-white/10" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-white/5 py-12 px-4">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V7m0 10v1"/></svg>
+            </div>
+            <span class="text-sm font-semibold text-slate-400">ExpenseTracker</span>
+            <span class="text-slate-600 text-xs ml-2">© 2026 DBMS Lab Project</span>
+        </div>
+        <div class="flex items-center gap-6">
+            <a href="/docs" class="text-sm text-slate-500 hover:text-slate-300 transition-colors">API Docs</a>
+            <a href="https://github.com/RavishCRZ27/expense-tracker" target="_blank" class="text-sm text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub
+            </a>
+        </div>
+    </div>
+</footer>
+{% endblock %}
